@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'; 
@@ -44,7 +45,7 @@ const App = () => {
         ],
         score: 0,
         isGameRunning: false,
-        animationSpeed: 250,
+        animationSpeed: 0,
     });
 
     const getGridPatten = async (req, res) => {
@@ -69,16 +70,38 @@ const App = () => {
     }, []);
 
     const handleStartGame = () => {
-        setGameData({ ...gameData, isGameRunning: true });
+        setGameData({ ...gameData, isGameRunning: true, score: 0 });
     }
 
     const handleStopGame = () => {
         setGameData({ ...gameData, isGameRunning: false });
+        setRedBlockIdx(0);
     }
 
     const changeScore = (dScore) => {
-        setGameData({ ...gameData, score: gameData.score + dScore });
+        if(gameData.isGameRunning)
+            setGameData({ ...gameData, score: gameData.score + dScore });
     }
+
+    const handleSpeedChange = (e) => {
+        setGameData({...gameData, animationSpeed: 250/(e.target.value)});
+    }
+
+    useEffect(() => {
+        let intervalId;
+
+        // Update redBlockIdx every second if the game is running
+        if (gameData.isGameRunning) {
+            intervalId = setInterval(() => {
+                setRedBlockIdx((prevRedBlockIdx) => (prevRedBlockIdx + 1) % 5); // Assuming 5 is the maximum index
+            }, gameData.animationSpeed);
+        }
+
+        // Cleanup interval when the component unmounts or when the game stops
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [gameData.isGameRunning]);
 
 
     return (
@@ -90,7 +113,7 @@ const App = () => {
                     <div className="score-container">Score: {gameData.score}</div>
                     <button onClick={handleStartGame} disabled={gameData.isGameRunning}>Start Game</button>
                     <button onClick={handleStopGame} disabled={!gameData.isGameRunning}>Stop Game</button>
-                    <select disabled={gameData.isGameRunning}>
+                    <select disabled={gameData.isGameRunning} onChange={handleSpeedChange}>
                         <option key={1} value="1">Speed 1</option>
                         <option key={2} value="2">Speed 2</option>
                         <option key={3} value="3">Speed 3</option>
