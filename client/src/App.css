@@ -20,12 +20,19 @@ body {
     gap: 0px 10px; 
 }
 
+/* ---------- Controls --------------------------------------- */
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .score-container {
     font-size: 24px;
     margin-bottom: 20px;
 }
 
-.controls-container {
+.controls-buttons{
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -52,11 +59,10 @@ select {
     padding: 8px;
 }
 
-
-
+/* ---------- Grid ------------------------------------------ */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(10, 50px);
+    grid-template-columns: repeat(10, 7.5vh);
     grid-gap: 3px;
     padding: 8px;
     border: 1px solid #eee;
@@ -64,8 +70,8 @@ select {
 }
 
 .grid-cell {
-    width: 50px;
-    height: 50px;
+    width: 7.5vh;
+    height: 7.5vh;
     border-radius: 30%;
     background-color: black;
 }
@@ -77,4 +83,88 @@ select {
     50% {
       opacity: 0;
     }
+}
+
+/* ---------- Meadia Queries ------------------------------------------ */
+@media only screen and (max-width: 961px) {
+    /* For Tablets: */
+    .game-container{
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .controls-container {
+        padding: 30px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 5px;
+    }
+
+    .score-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button {
+        margin: 0 2px;
+        padding: 8px 50px;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(10, 5vh);
+        grid-gap: 3px;
+        padding: 8px;
+        border: 1px solid #eee;
+        border-radius: 5%;
+    }
+    
+    .grid-cell {
+        width: 5vh;
+        height: 5vh;
+        border-radius: 30%;
+        background-color: black;
+    }
+
+}
+
+@media only screen and (max-width: 641px) {
+    /* For mobile phones: */
+
+    .app-container h1 span{
+        display: none;
+    }
+
+    .game-container{
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .controls-container {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        gap: 5px;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(10, 3.5vh);
+        grid-gap: 3px;
+        border: 1px solid #eee;
+        border-radius: 5%;
+    }
+    
+    .grid-cell {
+        width: 3.5vh;
+        height: 3.5vh;
+        border-radius: 30%;
+        background-color: black;
+    }
+    
 }

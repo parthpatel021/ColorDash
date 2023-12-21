@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-// Function to generate a 10x10 grid with random colors
+// Function to generate a 10x10 grid with random patten
 function generateGrid() {
     const grid = [];
 
@@ -27,13 +27,12 @@ function generateGrid() {
     return grid;
 }
 
-// Example endpoint to get initial grid data
+// endpoint to get initial grid data
 app.get('/initialGrid', (req, res) => {
     const initialGrid = generateGrid();
     res.send({ grid: initialGrid });
 });
 
-// Your other endpoints and logic...
 
 // Start the server
 app.listen(PORT, () => {
