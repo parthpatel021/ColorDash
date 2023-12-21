@@ -67,12 +67,14 @@ select {
     width: 50px;
     height: 50px;
     border-radius: 30%;
-}
-
-.blue {
-    background-color: #0000ff;
-}
-
-.red {
     background-color: black;
+}
+
+.blink{
+    animation: blinker 0.05s linear infinite;
+}
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
 }
