@@ -27,7 +27,7 @@ const GridCell = (props) => {
 
     return (
         <div
-            className={`grid-cell ${blinking ? 'blink' : ' '}`}
+            className={`grid-cell ${blinking ? 'tile-blink' : ' '}`}
             style={{ backgroundColor: `${isRed ? 'red' : (cell === 1 ? 'blue' : 'black')}` }}
             onMouseDown={handleClick}
         />
@@ -36,6 +36,7 @@ const GridCell = (props) => {
 
 const App = () => {
     // Game Variables
+    const[loading, setLoading] = useState(true);
     const [redBlockIdx, setRedBlockIdx] = useState(0);
     const [gameData, setGameData] = useState({
         grid: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -56,8 +57,10 @@ const App = () => {
 
     // Getting Grid Pattens from server
     const getGridPatten = async (req, res) => {
+        const apiURL = process.env.REACT_APP_API_URL || 'http://localhost:8080';    
         try {
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/initialGrid`);
+            setLoading(true);
+            const { data } = await axios.get(`${apiURL}/initialGrid`);
             const gridPatten = data.grid;
 
             setGameData({
@@ -66,7 +69,10 @@ const App = () => {
                 isGameRunning: false,
                 animationSpeed: 250,
             });
+
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.log(error);
         }
     }
@@ -98,11 +104,12 @@ const App = () => {
     // Red Bloacks Movements
     useEffect(() => {
         let intervalId;
+        const MAX_INDEX = 5; // 5 is the maximum index
 
         // Update redBlockIdx every second if the game is running
         if (gameData.isGameRunning) {
             intervalId = setInterval(() => {
-                setRedBlockIdx((prevRedBlockIdx) => (prevRedBlockIdx + 1) % 5); // 5 is the maximum index
+                setRedBlockIdx((prevRedBlockIdx) => (prevRedBlockIdx + 1) % MAX_INDEX); 
             }, gameData.animationSpeed);
         }
 
@@ -136,7 +143,12 @@ const App = () => {
 
                 {/* 10x10 grid  */}
                 <div className="grid-container">
-                    {gameData.grid.map((row, rowIndex) => (
+                    {loading ? 
+                    <div className='screen-loader'>
+                        Loading...
+                    </div>
+                    :
+                    gameData.grid.map((row, rowIndex) => (
                         <>
                             {row.map((cell, colIndex) => (
                                 <GridCell

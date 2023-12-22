@@ -76,13 +76,25 @@ select {
     background-color: black;
 }
 
-.blink{
+.tile-blink{
     animation: blinker 0.05s linear infinite;
 }
 @keyframes blinker {
     50% {
       opacity: 0;
     }
+}
+
+.screen-loader{
+    width: 78vh;
+    height: 78vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: 'Arial', sans-serif;
+    font-size: 4vh;
 }
 
 /* ---------- Meadia Queries ------------------------------------------ */
