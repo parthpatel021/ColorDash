@@ -28,7 +28,7 @@ const GridCell = (props) => {
     return (
         <div
             className={`grid-cell ${blinking ? 'tile-blink' : ' '}`}
-            style={{ backgroundColor: `${isRed ? 'red' : (cell === 1 ? 'blue' : 'black')}` }}
+            style={{ backgroundColor: `${isRed ? '#FF1E00' : (cell === 1 ? 'blue' : '#191919')}` }}
             onMouseDown={handleClick}
         />
     );
@@ -36,20 +36,11 @@ const GridCell = (props) => {
 
 const App = () => {
     // Game Variables
+    const [highScore, setHighScore] = useState(window.localStorage.getItem("HighScore") || 0);
     const[loading, setLoading] = useState(true);
     const [redBlockIdx, setRedBlockIdx] = useState(0);
     const [gameData, setGameData] = useState({
-        grid: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        ],
+        grid: Array.from({ length: 10 }, () => Array(10).fill(0)),
         score: 0,
         isGameRunning: false,
         animationSpeed: 0,
@@ -95,6 +86,11 @@ const App = () => {
     const changeScore = (dScore) => {
         if (gameData.isGameRunning)
             setGameData({ ...gameData, score: gameData.score + dScore });
+
+        if(gameData.score + dScore > highScore){
+            setHighScore(gameData.score + dScore);
+            window.localStorage.setItem("HighScore", gameData.score + dScore);
+        }
     }
 
     const handleSpeedChange = (e) => {
@@ -127,7 +123,10 @@ const App = () => {
             <div className="game-container">
                 {/* Controls */}
                 <div className="controls-container">
-                    <div className="score-container">Score: {gameData.score}</div>
+                    <div className="score-container">
+                        <div className='score'>Score: {gameData.score}</div>
+                        <div className='high-score'>High Score: {highScore}</div>
+                    </div>
                     <div className='controls-buttons'>
                         <button onClick={handleStartGame} disabled={gameData.isGameRunning}>Start Game</button>
                         <button onClick={handleStopGame} disabled={!gameData.isGameRunning}>Stop Game</button>
@@ -145,7 +144,7 @@ const App = () => {
                 <div className="grid-container">
                     {loading ? 
                     <div className='screen-loader'>
-                        Loading...
+                        Loading...  
                     </div>
                     :
                     gameData.grid.map((row, rowIndex) => (
